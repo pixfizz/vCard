@@ -15,6 +15,12 @@
         "PHOTO": "photo"
     };
 
+    var fieldTypeDefaults = {
+        "telephone": {name: "type", value: "voice"},
+        "email": {name: "type", value: "internet"},
+        "address": {name: "type", value: "work"}
+    };
+
     function lookupField(context, fieldName) {
 
         var propertyName = fieldPropertyMapping[fieldName];
@@ -59,7 +65,7 @@
         typeInfo = typeInfo.reduce(function (p, c) {
             p[c.name] = c.value;
             return p;
-        }, {});
+        }, fieldTypeDefaults[fieldName] || {});
 
         context.currentCard[fieldName] = context.currentCard[fieldName] || [];
 
@@ -169,7 +175,7 @@
 
             var pairs = line.split(':'),
                 fieldName = pairs[0],
-                fieldTypeInfo,
+                fieldTypeInfo = [],
                 fieldValue = pairs.slice(1).join(':');
 
             // is additional type info provided ?
